@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: insurance_api
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - insurance_network
+
+  # Streamlit Frontend
+  streamlit:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: insurance_streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:5000
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - insurance_network
+
+networks:
+  insurance_network:
+    driver: bridge

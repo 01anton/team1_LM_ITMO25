@@ -1,1 +1,0 @@
-# team1_LM_ITMO25
