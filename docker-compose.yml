@@ -11,12 +11,6 @@ services:
       - "5000:5000"
     environment:
       - PYTHONUNBUFFERED=1
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 5s
-      timeout: 10s
-      retries: 10
-      start_period: 30s
     networks:
       - insurance_network
     restart: on-failure 
